@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: clothesbox-map
+  web:
+    resources:
+      static-locations: classpath:/static/
+api:
+  SERVICE_KEY: "8o8DlJN4LeK6L/dKCK3X5mXnylPPfyG9GiO3ZRtQLyOYYrJm9H4ov+A6au/nWgwpZszPRdM/OYdPTDsfp4zR9Q=="

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>서대문구 의류수거함 지도</title>
+    <style>
+        #map {
+            width: 100%;
+            height: 800px;
+        }
+    </style>
+    <!-- 네이버 지도 API -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=44c7lycb4w&callback=CALLBACK_FUNCTION">
+    </script>
+</head>
+<body>
+<h2>서대문구 의류수거함 현황</h2>
+<div id="map"></div>
+
+<script>
+    var map = new naver.maps.Map('map', {
+        center: new naver.maps.LatLng(37.579617, 126.936826), // 서대문구청 위치
+        zoom: 14
+    });
+
+    fetch('/api/box/markers')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(box => {
+                const lat = parseFloat(box.latitude);
+                const lng = parseFloat(box.longitude);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    const marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(lat, lng),
+                        map: map,
+                        title: box.address
+                    });
+
+                    const infoWindow = new naver.maps.InfoWindow({
+                        content: `<div style="padding:8px;">${box.address} (${box.dong})</div>`
+                    });
+
+                    naver.maps.Event.addListener(marker, 'click', function () {
+                        infoWindow.open(map, marker);
+                    });
+                }
+            });
+        })
+        .catch(err => console.error('마커 데이터를 가져오는 중 오류 발생', err));
+</script>
+</body>
+</html>
